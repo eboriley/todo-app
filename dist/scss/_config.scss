@@ -1,0 +1,27 @@
+:root{
+    --clr-primary: #0d5c75;
+    --clr-ocean: #199fb1;
+    --clr-ocean-light:#a5d1e1;
+    --clr-light-grey: #ddd;
+    --clr-lightred: #fb7b8e;
+    --clr-light-light-red: #faa7b8;
+    --clr-white: #fff;
+}
+
+*,
+*::after,
+*::before{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-family: 'Hind', sans-serif;
+    width: 100%;
+    height: 100%;
+    background: var(--clr-primary);
+}
+
+
+
