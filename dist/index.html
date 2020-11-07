@@ -14,17 +14,17 @@
     <div class="container">
         <h3 id="app_name">Todo</h3>
         <div class="todos">
-            <ul>
-                <li>Oct 3 ---- Busy Monday</li>
-                <li>Oct 3 ---- Finish Logo Projects</li>
-                <li>Oct 4 ---- Biuld JS project</li>
+            <ul data-todos>
+                <li>Monday, Oct 3 ---- Busy Monday</li>
+                <li>Tuesday, Oct 3 ---- Finish Logo Projects</li>
+                <li>Wednesday, Oct 4 ---- Biuld JS project</li>
             </ul>
-            <form action="">
-                <input class="todo_input" type="text">
-                <button class="add_todo">New todo</button>
+            <form action="" id="todo_form">
+                <input class="todo_input" type="text" id="todo_input">
+                <button class="add_todo" id="add_todo">New todo</button>
             </form>
             <div class="clear_delete">
-                <p>clear todos</p>
+                <p id="clear_todos">clear todos</p>
                 <p>remove todo</p>
             </div>
         </div>
@@ -49,6 +49,7 @@
         <input type="checkbox">
         <label for=""><span class="custom_checkbox"></span></label>
     </template>
+    <script src="script.js"></script>
 </body>
 
 </html>
