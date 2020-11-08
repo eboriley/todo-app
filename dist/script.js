@@ -1,22 +1,32 @@
 const todos_container = document.querySelector('[data-todos]');
 const todo_form = document.getElementById('todo_form');
 const clear_todos = document.getElementById('clear_todos');
+const remove_todo = document.getElementById('remove_todo');
+
 
 const LOCAL_STORAGE_TODOS = 'todo.todos';
 const LOCAL_STORAGE_SELECTED_TODO = 'todo.selectedTodo';
 let todos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TODOS)) || [];
 let selectedTodo = localStorage.getItem(LOCAL_STORAGE_SELECTED_TODO);
 
-
 todos_container.addEventListener('click', event => {
     if (event.target.tagName.toLowerCase() === 'li') {
         selectedTodo = event.target.dataset.todoId;
+        render();
+        save();
     }
 })
 
 clear_todos.addEventListener('click', () => {
     localStorage.clear();
     render();
+})
+
+remove_todo.addEventListener('click', () => {
+    todos = todos.filter(todos => todos.id !== selectedTodo);
+    selectedTodo = null;
+    render();
+    save();
 })
 
 todo_form.addEventListener('submit', event => {
@@ -53,7 +63,6 @@ function createTodo(name) {
 }
 
 
-
 render();
 
 function render() {
@@ -63,6 +72,9 @@ function render() {
         each_todo.innerText = `${todo.date} ${todo.name}`;
         each_todo.dataset.todoId = todo.id;
         todos_container.appendChild(each_todo);
+        if (todo.id === selectedTodo) {
+            each_todo.classList.add('selected_item');
+        }
     })
 }
 

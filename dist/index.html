@@ -24,8 +24,8 @@
                 <button class="add_todo" id="add_todo">New todo</button>
             </form>
             <div class="clear_delete">
-                <p id="clear_todos">clear todos</p>
-                <p>remove todo</p>
+                <p id="clear_todos">clear completed todos</p>
+                <p id="remove_todo">remove todo</p>
             </div>
         </div>
         <div class="tasks">
@@ -33,11 +33,18 @@
                 <p id="task_heading">Finish Logo Projects</p>
                 <p id="task_remaining">tasks remaining 2</p>
             </div>
-            <ul>
-                <li>Build concepts</li>
-                <li>sketch up designs</li>
-                <li>design logo</li>
-            </ul>
+            <div class="task">
+                <input type="checkbox" id="task_1">
+                <label for="task_1"> <span class="custom_checkbox"></span> We still coding</label>
+            </div>
+            <div class="task">
+                <input type="checkbox" id="task_2">
+                <label for="task_2"> <span class="custom_checkbox"></span> We will get there</label>
+            </div>
+            <div class="task">
+                <input type="checkbox" id="task_3">
+                <label for="task_3"> <span class="custom_checkbox"></span> We dont stop</label>
+            </div>
             <form action="">
                 <input class="todo_input" type="text">
                 <button class="add_todo">New task</button>
