@@ -132,7 +132,6 @@
   .task label {
       color: var(--clr-white);
       font-family: 'Abel', sans-serif;
-      opacity: .6;
       align-items: center;
       position: relative;
       display: inline-flex;
@@ -140,6 +139,7 @@
 
   .task label:hover{
     opacity: 1;
+    font-weight: 700;
   }
 
    .custom_checkbox{
@@ -192,8 +192,7 @@
   }
 
   [type="checkbox"]:checked + label {
-    font-weight: 700;
-    opacity: 1;
+    opacity: 0.6;
   }
   [type="checkbox"]:checked + label::after {
     transform: scale(1);
