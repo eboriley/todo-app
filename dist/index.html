@@ -33,28 +33,34 @@
                 <p id="task_heading">Finish Logo Projects</p>
                 <p id="task_remaining">tasks remaining 2</p>
             </div>
-            <div class="task">
-                <input type="checkbox" id="task_1">
-                <label for="task_1"> <span class="custom_checkbox"></span> We still coding</label>
+            <div class="task_container" data-tasks>
+                <div class="task">
+                    <input type="checkbox" id="task_1">
+                    <label for="task_1"> <span class="custom_checkbox"></span> We still coding</label>
+                </div>
+                <div class="task">
+                    <input type="checkbox" id="task_2">
+                    <label for="task_2"> <span class="custom_checkbox"></span> We will get there</label>
+                </div>
+                <div class="task">
+                    <input type="checkbox" id="task_3">
+                    <label for="task_3"> <span class="custom_checkbox"></span> We dont stop</label>
+                </div>
             </div>
-            <div class="task">
-                <input type="checkbox" id="task_2">
-                <label for="task_2"> <span class="custom_checkbox"></span> We will get there</label>
-            </div>
-            <div class="task">
-                <input type="checkbox" id="task_3">
-                <label for="task_3"> <span class="custom_checkbox"></span> We dont stop</label>
-            </div>
-            <form action="">
-                <input class="todo_input" type="text">
+
+            <form action="" id="task_form">
+                <input class="todo_input" type="text" id="task_input">
                 <button class="add_todo">New task</button>
             </form>
         </div>
     </div>
 
-    <template id="checkbox_template">
-        <input type="checkbox">
-        <label for=""><span class="custom_checkbox"></span></label>
+    <template id="task_template">
+        <div class="task">
+            <input type="checkbox">
+            <label><span class="custom_checkbox"></span></label>
+        </div>
+
     </template>
     <script src="script.js"></script>
 </body>

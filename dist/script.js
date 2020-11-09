@@ -2,30 +2,33 @@ const todos_container = document.querySelector('[data-todos]');
 const todo_form = document.getElementById('todo_form');
 const clear_todos = document.getElementById('clear_todos');
 const remove_todo = document.getElementById('remove_todo');
+const tasks_container = document.querySelector('[data-tasks]');
+const task_form = document.getElementById('task_form');
+const task_template = document.getElementById('task_template');
 
 
 const LOCAL_STORAGE_TODOS = 'todo.todos';
 const LOCAL_STORAGE_SELECTED_TODO = 'todo.selectedTodo';
 let todos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TODOS)) || [];
-let selectedTodo = localStorage.getItem(LOCAL_STORAGE_SELECTED_TODO);
+let selected_todo_id = localStorage.getItem(LOCAL_STORAGE_SELECTED_TODO);
 
 todos_container.addEventListener('click', event => {
     if (event.target.tagName.toLowerCase() === 'li') {
-        selectedTodo = event.target.dataset.todoId;
-        render();
+        selected_todo_id = event.target.dataset.todoId;
+        renderTodo();
         save();
     }
 })
 
 clear_todos.addEventListener('click', () => {
     localStorage.clear();
-    render();
+    renderTodo();
 })
 
 remove_todo.addEventListener('click', () => {
-    todos = todos.filter(todos => todos.id !== selectedTodo);
-    selectedTodo = null;
-    render();
+    todos = todos.filter(todos => todos.id !== selected_todo_id);
+    selected_todo_id = null;
+    renderTodo();
     save();
 })
 
@@ -39,7 +42,7 @@ todo_form.addEventListener('submit', event => {
     new_todo.innerText = todo;
     todos_container.appendChild(new_todo);
     save();
-    render();
+    renderTodo();
 })
 
 function createTodo(name) {
@@ -62,23 +65,56 @@ function createTodo(name) {
     }
 }
 
+task_form.addEventListener('submit', event => {
+    event.preventDefault();
+    const task_input = document.getElementById('task_input');
+    const task = createTask(task_input.value);
+    const selected_todo = todos.find(todo => todo.id === selected_todo_id);
+    selected_todo.tasks.push(task);
+    task_input.value = null;
+    renderTask();
+    save();
+})
 
-render();
+function createTask(task) {
+    return {
+        id: Date.now().toString(),
+        name: task,
+        complete: false
+    }
+}
 
-function render() {
-    clearTodoContainer(todos_container)
+renderTodo();
+renderTask();
+function renderTodo() {
+    clearContainer(todos_container)
     todos.forEach(todo => {
         const each_todo = document.createElement('li');
         each_todo.innerText = `${todo.date} ${todo.name}`;
         each_todo.dataset.todoId = todo.id;
         todos_container.appendChild(each_todo);
-        if (todo.id === selectedTodo) {
+        if (todo.id === selected_todo_id) {
             each_todo.classList.add('selected_item');
         }
     })
 }
 
-function clearTodoContainer(element) {
+function renderTask() {
+    clearContainer(tasks_container);
+    const selected_todo = todos.find(todo => todo.id === selected_todo_id);
+    selected_todo.tasks.forEach(task => {
+        const each_task = document.importNode(task_template.content, true);
+        const checkbox = each_task.querySelector('input');
+        checkbox.id = task.id;
+        checkbox.checkbox = task.complete;
+        const label = each_task.querySelector('label');
+        label.htmlFor = task.id;
+        label.append(task.name);
+        tasks_container.appendChild(each_task);
+    })
+}
+
+function clearContainer(element) {
     while (element.firstChild) {
         element.removeChild(element.firstChild)
     }
@@ -86,5 +122,5 @@ function clearTodoContainer(element) {
 
 function save() {
     localStorage.setItem(LOCAL_STORAGE_TODOS, JSON.stringify(todos));
-    localStorage.setItem(LOCAL_STORAGE_SELECTED_TODO, selectedTodo);
+    localStorage.setItem(LOCAL_STORAGE_SELECTED_TODO, selected_todo_id);
 }
