@@ -5,31 +5,47 @@ const remove_todo = document.getElementById('remove_todo');
 const tasks_container = document.querySelector('[data-tasks]');
 const task_form = document.getElementById('task_form');
 const task_template = document.getElementById('task_template');
-
+const task_heading = document.getElementById('task_heading');
+const task_container = document.getElementById('tasks');
+const clear_completed_task = document.getElementById('clear_completed_task');
 
 const LOCAL_STORAGE_TODOS = 'todo.todos';
 const LOCAL_STORAGE_SELECTED_TODO = 'todo.selectedTodo';
 let todos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TODOS)) || [];
 let selected_todo_id = localStorage.getItem(LOCAL_STORAGE_SELECTED_TODO);
 
+
 todos_container.addEventListener('click', event => {
     if (event.target.tagName.toLowerCase() === 'li') {
         selected_todo_id = event.target.dataset.todoId;
-        renderTodo();
-        save();
+        saveNrender();
     }
 })
 
-clear_todos.addEventListener('click', () => {
-    localStorage.clear();
-    renderTodo();
+tasks_container.addEventListener('click', event => {
+    if (event.target.tagName.toLowerCase() === 'input') {
+        const selected_todo =
+            todos.find(todo => todo.id === selected_todo_id);
+        const selected_task =
+            selected_todo.tasks.find(task => task.id === event.target.id);
+        selected_task.complete = event.target.checked;
+        save();
+        tasksCounter(selected_todo);
+    }
 })
+
 
 remove_todo.addEventListener('click', () => {
     todos = todos.filter(todos => todos.id !== selected_todo_id);
     selected_todo_id = null;
-    renderTodo();
-    save();
+    saveNrender();
+})
+
+clear_completed_task.addEventListener('click', () => {
+    const selected_todo = todos.find(todo => todo.id === selected_todo_id);
+    selected_todo.tasks = selected_todo.tasks.filter(task => !task.complete);
+    saveNrender();
+
 })
 
 todo_form.addEventListener('submit', event => {
@@ -41,9 +57,9 @@ todo_form.addEventListener('submit', event => {
     const new_todo = document.createElement('li');
     new_todo.innerText = todo;
     todos_container.appendChild(new_todo);
-    save();
-    renderTodo();
+    saveNrender();
 })
+
 
 function createTodo(name) {
     const date = new Date();
@@ -72,8 +88,7 @@ task_form.addEventListener('submit', event => {
     const selected_todo = todos.find(todo => todo.id === selected_todo_id);
     selected_todo.tasks.push(task);
     task_input.value = null;
-    renderTask();
-    save();
+    saveNrender();
 })
 
 function createTask(task) {
@@ -84,10 +99,31 @@ function createTask(task) {
     }
 }
 
-renderTodo();
-renderTask();
+
+saveNrender();
+
+function saveNrender() {
+    save();
+    render();
+}
+
+
+function render() {
+    clearContainer(todos_container);
+    clearContainer(tasks_container)
+    renderTodo();
+    const selected_todo = todos.find(todos => todos.id === selected_todo_id)
+    if (selected_todo_id === null) {
+        task_container.style.display = 'none';
+    } else {
+        task_container.style.display = '';
+        renderTask(selected_todo);
+        // clearContainer(tasks_container);
+        tasksCounter(selected_todo);
+    }
+}
+
 function renderTodo() {
-    clearContainer(todos_container)
     todos.forEach(todo => {
         const each_todo = document.createElement('li');
         each_todo.innerText = `${todo.date} ${todo.name}`;
@@ -99,20 +135,27 @@ function renderTodo() {
     })
 }
 
-function renderTask() {
-    clearContainer(tasks_container);
-    const selected_todo = todos.find(todo => todo.id === selected_todo_id);
+function renderTask(selected_todo) {
     selected_todo.tasks.forEach(task => {
         const each_task = document.importNode(task_template.content, true);
         const checkbox = each_task.querySelector('input');
         checkbox.id = task.id;
-        checkbox.checkbox = task.complete;
+        checkbox.checked = task.complete;
         const label = each_task.querySelector('label');
         label.htmlFor = task.id;
         label.append(task.name);
         tasks_container.appendChild(each_task);
     })
+
+    task_heading.innerHTML = selected_todo.name;
 }
+
+function tasksCounter(selected_todo) {
+    const task_remaining_count = selected_todo.tasks.filter(task => !task.complete).length;
+    const task_remaining = document.getElementById('task_remaining');
+    task_remaining.innerHTML = `task remaining: ${task_remaining_count}`;
+};
+
 
 function clearContainer(element) {
     while (element.firstChild) {
